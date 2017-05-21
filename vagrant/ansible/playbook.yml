@@ -1,0 +1,17 @@
+- hosts: default
+  become: true
+  tasks:
+  - name: update all
+    yum: name=* state=latest
+  - name: install node.js
+    yum: name=nodejs state=latest
+  - name: install apache
+    yum: name=httpd state=latest
+  - name: start apache
+    service: name=httpd state=started enabled=yes
+  - name: setup conf file
+    template: src=./template/httpd.conf.j2 dest=/etc/httpd/conf.d/httpd.conf
+  - name: restart apache
+    service: name=httpd state=restarted
+  - name: disable firewalld
+    service: name=firewalld state=stopped enabled=no
